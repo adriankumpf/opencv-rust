@@ -28,8 +28,6 @@ pub enum OperatorKind {
 	GreaterThanOrEqual,
 	LessThan,
 	LessThanOrEqual,
-	Incr,
-	Decr,
 	And,
 	Or,
 	Xor,
@@ -57,8 +55,6 @@ impl OperatorKind {
 			">=" => OperatorKind::GreaterThanOrEqual,
 			"<" => OperatorKind::LessThan,
 			"<=" => OperatorKind::LessThanOrEqual,
-			"++" => OperatorKind::Incr,
-			"--" => OperatorKind::Decr,
 			"&" => OperatorKind::And,
 			"|" => OperatorKind::Or,
 			"^" => OperatorKind::Xor,
@@ -82,8 +78,6 @@ impl OperatorKind {
 			| OperatorKind::GreaterThanOrEqual
 			| OperatorKind::LessThan
 			| OperatorKind::LessThanOrEqual
-			| OperatorKind::Incr
-			| OperatorKind::Decr
 			| OperatorKind::And
 			| OperatorKind::Or
 			| OperatorKind::Xor => true,
@@ -598,19 +592,12 @@ impl Element for Func<'_, '_> {
 		}
 		DefaultElement::is_excluded(self)
 			|| self.is_generic()
-			|| self.kind().as_operator().map_or(false, |kind| {
-				if matches!(kind, (_, OperatorKind::Incr | OperatorKind::Decr)) {
-					// filter out postfix version of ++ and --: https://en.cppreference.com/w/cpp/language/operator_incdec
-					self.clang_arguments().len() == 1
-				} else {
-					false
-				}
-			}) || if let Some(cls) = self.kind().as_constructor() {
-			// don't generate constructors of abstract classes
-			cls.is_abstract()
-		} else {
-			false
-		}
+			|| if let Some(cls) = self.kind().as_constructor() {
+				// don't generate constructors of abstract classes
+				cls.is_abstract()
+			} else {
+				false
+			}
 	}
 
 	fn is_ignored(&self) -> bool {

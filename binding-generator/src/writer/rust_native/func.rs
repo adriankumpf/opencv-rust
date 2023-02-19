@@ -74,9 +74,7 @@ fn gen_rust_with_name(f: &Func, name: &str, opencv_version: &str) -> String {
 		}
 		if let Some((slice_arg, len_div)) = arg.as_slice_len() {
 			let slice_call = if len_div > 1 {
-				format!(
-					"({slice_arg}.len() / {len_div}) as _"
-				)
+				format!("({slice_arg}.len() / {len_div}) as _")
 			} else {
 				format!("{slice_arg}.len() as _")
 			};
@@ -217,10 +215,7 @@ fn rust_return_map(
 		} else {
 			".ok_or_else(|| Error::new(core::StsNullPtr, \"Function returned null pointer\"))?"
 		};
-		format!(
-			"{unsafety_call}{{ {ret_name}.{ptr_call}() }}{error_handling}",
-		)
-		.into()
+		format!("{unsafety_call}{{ {ret_name}.{ptr_call}() }}{error_handling}",).into()
 	} else {
 		"".into()
 	}
@@ -248,12 +243,8 @@ pub fn cpp_return_map<'f>(return_type: &TypeRef, name: &'f str, is_constructor: 
 				format!("ocvrs_create_string({name}.c_str())").into()
 			}
 			StrType::CharPtr => format!("ocvrs_create_string({name})").into(),
-			StrType::StdString(StrEnc::Binary) => {
-				format!("ocvrs_create_byte_string({name}.data(), {name}.size())").into()
-			}
-			StrType::CvString(StrEnc::Binary) => {
-				format!("ocvrs_create_byte_string({name}.begin(), {name}.size())").into()
-			}
+			StrType::StdString(StrEnc::Binary) => format!("ocvrs_create_byte_string({name}.data(), {name}.size())").into(),
+			StrType::CvString(StrEnc::Binary) => format!("ocvrs_create_byte_string({name}.begin(), {name}.size())").into(),
 		};
 		(str_mk, false)
 	} else {
@@ -375,8 +366,6 @@ impl RustElement for Func<'_, '_> {
 					OperatorKind::GreaterThanOrEqual => "greater_than_or_equal",
 					OperatorKind::LessThan => "less_than",
 					OperatorKind::LessThanOrEqual => "less_than_or_equal",
-					OperatorKind::Incr => "incr",
-					OperatorKind::Decr => "decr",
 					OperatorKind::And => "and",
 					OperatorKind::Or => "or",
 					OperatorKind::Xor => "xor",

@@ -529,7 +529,6 @@ pub static FUNC_RENAME: Lazy<HashMap<&str, &str>> = Lazy::new(|| {
 pub static FUNC_CFG_ATTR: Lazy<HashMap<&str, (&str, &str)>> = Lazy::new(|| {
 	hashmap! {
 		// ### core ###
-		"cv_SparseMatConstIterator_operatorSS" => ("not(target_os = \"windows\")", "!defined(OCVRS_TARGET_OS_WINDOWS)"),
 		"cv__OutputArray__OutputArray_const_vectorLGpuMatGR" => ("not(target_os = \"windows\")", "!defined(OCVRS_TARGET_OS_WINDOWS)"),
 
 		// ### imgproc ###
