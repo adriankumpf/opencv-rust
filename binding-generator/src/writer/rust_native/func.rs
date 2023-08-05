@@ -115,8 +115,6 @@ impl RustElement for Func<'_, '_> {
 					OperatorKind::GreaterThanOrEqual => "greater_than_or_equal",
 					OperatorKind::LessThan => "less_than",
 					OperatorKind::LessThanOrEqual => "less_than_or_equal",
-					OperatorKind::Incr => "incr",
-					OperatorKind::Decr => "decr",
 					OperatorKind::And => "and",
 					OperatorKind::Or => "or",
 					OperatorKind::Xor => "xor",

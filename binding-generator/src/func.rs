@@ -593,14 +593,8 @@ impl Element for Func<'_, '_> {
 			})
 			.with_is_excluded(|| {
 				self.is_generic()
-					|| kind.as_operator().map_or(false, |kind| {
-						if matches!(kind, (_, OperatorKind::Incr | OperatorKind::Decr)) {
-							// filter out postfix version of ++ and --: https://en.cppreference.com/w/cpp/language/operator_incdec
-							self.num_arguments() == 1
-						} else {
-							false
-						}
-					}) || kind.as_constructor().map_or(false, |cls| cls.is_abstract()) // don't generate constructors of abstract classes
+					|| kind.as_operator().map_or(false, |_kind| false)
+					|| kind.as_constructor().map_or(false, |cls| cls.is_abstract()) // don't generate constructors of abstract classes
 			})
 	}
 
@@ -768,8 +762,6 @@ pub enum OperatorKind {
 	GreaterThanOrEqual,
 	LessThan,
 	LessThanOrEqual,
-	Incr,
-	Decr,
 	And,
 	Or,
 	Xor,
@@ -797,8 +789,6 @@ impl OperatorKind {
 			">=" => OperatorKind::GreaterThanOrEqual,
 			"<" => OperatorKind::LessThan,
 			"<=" => OperatorKind::LessThanOrEqual,
-			"++" => OperatorKind::Incr,
-			"--" => OperatorKind::Decr,
 			"&" => OperatorKind::And,
 			"|" => OperatorKind::Or,
 			"^" => OperatorKind::Xor,
@@ -822,8 +812,6 @@ impl OperatorKind {
 			| OperatorKind::GreaterThanOrEqual
 			| OperatorKind::LessThan
 			| OperatorKind::LessThanOrEqual
-			| OperatorKind::Incr
-			| OperatorKind::Decr
 			| OperatorKind::And
 			| OperatorKind::Or
 			| OperatorKind::Xor => true,
